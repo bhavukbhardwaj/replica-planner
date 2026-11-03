@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 730" font-family="Helvetica, Arial, sans-serif">
+<rect width="1180" height="730" fill="#fff"/>
+<text x="590" y="32" text-anchor="middle" font-size="20" font-weight="bold">Reading the /plan response (POST prod-healthy to 5 replicas)</text>
+<text x="590" y="54" text-anchor="middle" font-size="13" fill="#475569">Colour shows who produced each field. Only the explanation and evidence_refs come from the model.</text>
+<rect x="40" y="68" width="16" height="16" rx="3" fill="#eef2ff" stroke="#4f46e5"/><text x="62" y="81" font-size="12">Your request</text>
+<rect x="184" y="68" width="16" height="16" rx="3" fill="#f0fdf4" stroke="#16a34a"/><text x="206" y="81" font-size="12">Tool data (fixtures)</text>
+<rect x="384" y="68" width="16" height="16" rx="3" fill="#fff7ed" stroke="#ea580c"/><text x="406" y="81" font-size="12">Model (untrusted)</text>
+<rect x="563" y="68" width="16" height="16" rx="3" fill="#fff7ed" stroke="#ea580c"/><text x="585" y="81" font-size="12">Model, checked by code</text>
+<rect x="777" y="68" width="16" height="16" rx="3" fill="#fef2f2" stroke="#dc2626"/><text x="799" y="81" font-size="12">Code</text>
+<text x="40" y="102" font-size="12" font-weight="bold" fill="#475569">FIELD</text><text x="270" y="102" font-size="12" font-weight="bold" fill="#475569">VALUE</text><text x="640" y="102" font-size="12" font-weight="bold" fill="#475569">WHAT IT MEANS</text>
+<rect x="30" y="110" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="137" font-size="14" font-weight="bold" font-family="Menlo, monospace">decision</text>
+<text x="270" y="137" font-size="12" font-family="Menlo, monospace">"requires_approval"</text>
+<text x="640" y="137" font-size="12">Final verdict from the policy engine. Production changes always need a human.</text>
+<rect x="30" y="160" width="1120" height="44" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+<text x="42" y="187" font-size="14" font-weight="bold" font-family="Menlo, monospace">current_state</text>
+<text x="270" y="187" font-size="12" font-family="Menlo, monospace">replicas 3, error_rate 0.005, owner</text>
+<text x="640" y="187" font-size="12">Read by get_service_state from the fixture. error_rate 0.005 = 0.5%.</text>
+<rect x="30" y="210" width="1120" height="44" rx="6" fill="#eef2ff" stroke="#4f46e5"/>
+<text x="42" y="237" font-size="14" font-weight="bold" font-family="Menlo, monospace">requested_state</text>
+<text x="270" y="237" font-size="12" font-family="Menlo, monospace">replicas 5</text>
+<text x="640" y="237" font-size="12">Copied from your request. The model cannot change it.</text>
+<rect x="30" y="260" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="287" font-size="14" font-weight="bold" font-family="Menlo, monospace">decision_basis</text>
+<text x="270" y="287" font-size="12" font-family="Menlo, monospace">"Production changes require..."</text>
+<text x="640" y="287" font-size="12">Plain-English reason the code reached the decision.</text>
+<rect x="30" y="310" width="1120" height="44" rx="6" fill="#fff7ed" stroke="#ea580c"/>
+<text x="42" y="337" font-size="14" font-weight="bold" font-family="Menlo, monospace">explanation</text>
+<text x="270" y="337" font-size="12" font-family="Menlo, monospace">"Current replicas 3, desired 5..."</text>
+<text x="640" y="337" font-size="12">Model-written summary. Display only, never used to decide.</text>
+<rect x="30" y="360" width="1120" height="44" rx="6" fill="#fff7ed" stroke="#ea580c"/>
+<text x="42" y="387" font-size="14" font-weight="bold" font-family="Menlo, monospace">evidence_refs</text>
+<text x="270" y="387" font-size="12" font-family="Menlo, monospace">3 refs: state:..., policy:...</text>
+<text x="640" y="387" font-size="12">Model cites its evidence; code rejects any ref the tools did not return.</text>
+<rect x="30" y="410" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="437" font-size="14" font-weight="bold" font-family="Menlo, monospace">verification_steps</text>
+<text x="270" y="437" font-size="12" font-family="Menlo, monospace">3 steps</text>
+<text x="640" y="437" font-size="12">What a human should check after applying the change.</text>
+<rect x="30" y="460" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="487" font-size="14" font-weight="bold" font-family="Menlo, monospace">rollback</text>
+<text x="270" y="487" font-size="12" font-family="Menlo, monospace">back to 3 replicas + limitation</text>
+<text x="640" y="487" font-size="12">How to undo it (manual) and what rollback cannot fix.</text>
+<rect x="30" y="510" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="537" font-size="14" font-weight="bold" font-family="Menlo, monospace">change_artifact</text>
+<text x="270" y="537" font-size="12" font-family="Menlo, monospace">service, env, previous 3, proposed 5</text>
+<text x="640" y="537" font-size="12">The proposal. Only these 4 fields. Not permission to execute.</text>
+<rect x="30" y="560" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="587" font-size="14" font-weight="bold" font-family="Menlo, monospace">applied</text>
+<text x="270" y="587" font-size="12" font-family="Menlo, monospace">false</text>
+<text x="640" y="587" font-size="12">Always false. This service never changes infrastructure.</text>
+<rect x="30" y="610" width="1120" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+<text x="42" y="637" font-size="14" font-weight="bold" font-family="Menlo, monospace">tool_trace</text>
+<text x="270" y="637" font-size="12" font-family="Menlo, monospace">get_service_state, get_deployment_policy</text>
+<text x="640" y="637" font-size="12">Proof the model called the two allowed read-only tools.</text>
+<text x="590" y="706" text-anchor="middle" font-size="13" fill="#b91c1c">Nothing was applied. The artifact is a proposal that a human must approve.</text></svg>

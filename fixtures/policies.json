@@ -1,0 +1,5 @@
+{
+  "dev-healthy:development": {"min_replicas": 1, "max_replicas": 5, "requires_approval": false, "constraints": ["replica scaling only"]},
+  "prod-healthy:production": {"min_replicas": 2, "max_replicas": 10, "requires_approval": true, "constraints": ["replica scaling only", "human approval required"]},
+  "dev-unhealthy:development": {"min_replicas": 1, "max_replicas": 5, "requires_approval": false, "constraints": ["replica scaling only"]}
+}

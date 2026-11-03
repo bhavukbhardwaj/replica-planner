@@ -1,0 +1,6 @@
+{
+  "dev-healthy:development": {"service_id": "dev-healthy", "environment": "development", "replicas": 2, "owner": "team-search", "error_rate": 0.01, "health": "healthy", "window": "last 30m"},
+  "prod-healthy:production": {"service_id": "prod-healthy", "environment": "production", "replicas": 3, "owner": "team-payments", "error_rate": 0.005, "health": "healthy", "window": "last 30m"},
+  "dev-unhealthy:development": {"service_id": "dev-unhealthy", "environment": "development", "replicas": 2, "owner": "team-growth", "error_rate": 0.08, "health": "degraded", "window": "last 30m"},
+  "no-policy:development": {"service_id": "no-policy", "environment": "development", "replicas": 2, "owner": "team-infra", "error_rate": 0.0, "health": "healthy", "window": "last 30m"}
+}

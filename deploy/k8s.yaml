@@ -1,0 +1,52 @@
+# Deploys the planner into its own namespace; touches nothing else in the cluster.
+apiVersion: v1
+kind: Namespace
+metadata: {name: planner}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: planner-providers, namespace: planner}
+data:
+  providers.yaml: |
+    active: ollama
+    providers:
+      fake: {kind: fake}
+      ollama:
+        kind: openai_compat
+        base_url: http://host.docker.internal:11434/v1
+        model: gpt-oss:20b
+        timeout_s: 120
+---
+apiVersion: v1
+kind: Secret
+metadata: {name: planner-secrets, namespace: planner}
+stringData:
+  PLAN_API_TOKEN: demo-token   # local demo value only; replace via `kubectl create secret` for anything real
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: planner, namespace: planner}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: planner}}
+  template:
+    metadata: {labels: {app: planner}}
+    spec:
+      containers:
+        - name: planner
+          image: replica-planner:local
+          imagePullPolicy: Never
+          ports: [{containerPort: 8000}]
+          envFrom: [{secretRef: {name: planner-secrets}}]
+          volumeMounts: [{name: cfg, mountPath: /etc/planner}]
+          readinessProbe: {httpGet: {path: /healthz, port: 8000}}
+      volumes:
+        - name: cfg
+          configMap: {name: planner-providers}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: planner, namespace: planner}
+spec:
+  selector: {app: planner}
+  ports: [{port: 80, targetPort: 8000}]

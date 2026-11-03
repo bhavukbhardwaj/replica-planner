@@ -1,0 +1,16 @@
+# Provider list. In Kubernetes this file is mounted from a ConfigMap.
+# Override the active one with env MODEL_PROVIDER. Optional API key: env MODEL_API_KEY.
+active: fake
+providers:
+  fake:
+    kind: fake
+  ollama:
+    kind: openai_compat
+    base_url: http://localhost:11434/v1   # in kind: http://host.docker.internal:11434/v1
+    model: gpt-oss:20b
+    timeout_s: 120
+  ollama-small:
+    kind: openai_compat
+    base_url: http://localhost:11434/v1
+    model: qwen3:0.6b
+    timeout_s: 60

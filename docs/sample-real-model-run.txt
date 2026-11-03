@@ -1,0 +1,319 @@
+### 1. allowed dev plan
+{
+    "decision": "allowed",
+    "current_state": {
+        "replicas": 2,
+        "error_rate": 0.01,
+        "owner": "team-search"
+    },
+    "requested_state": {
+        "replicas": 3,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Within policy range and service is healthy.",
+    "explanation": "Current replicas are 2, desired is 3, within allowed range 1\u20135, no approval needed.",
+    "evidence_refs": [
+        "state:dev-healthy:development:replicas",
+        "policy:dev-healthy:development:range",
+        "policy:dev-healthy:development:approval"
+    ],
+    "verification_steps": [
+        "After a human applies the change, confirm dev-healthy runs 3 ready replicas in development.",
+        "Watch error rate and latency for 15 minutes; it should not rise above the pre-change level.",
+        "Confirm no pending/crash-looping pods."
+    ],
+    "rollback": [
+        "Scale dev-healthy back to 2 replicas (manual; this service does not execute it).",
+        "Limitation: rollback does not undo effects of load shifted or requests failed during the change."
+    ],
+    "change_artifact": {
+        "service": "dev-healthy",
+        "environment": "development",
+        "previous_replicas": 2,
+        "proposed_replicas": 3
+    },
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 2. prod -> requires_approval
+{
+    "decision": "requires_approval",
+    "current_state": {
+        "replicas": 3,
+        "error_rate": 0.005,
+        "owner": "team-payments"
+    },
+    "requested_state": {
+        "replicas": 5,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Production changes require human approval; this is a proposal only.",
+    "explanation": "Current replicas 3, desired 5 within allowed range 2\u201310, but requires approval",
+    "evidence_refs": [
+        "state:prod-healthy:production:replicas",
+        "policy:prod-healthy:production:range",
+        "policy:prod-healthy:production:approval"
+    ],
+    "verification_steps": [
+        "After a human applies the change, confirm prod-healthy runs 5 ready replicas in production.",
+        "Watch error rate and latency for 15 minutes; it should not rise above the pre-change level.",
+        "Confirm no pending/crash-looping pods."
+    ],
+    "rollback": [
+        "Scale prod-healthy back to 3 replicas (manual; this service does not execute it).",
+        "Limitation: rollback does not undo effects of load shifted or requests failed during the change."
+    ],
+    "change_artifact": {
+        "service": "prod-healthy",
+        "environment": "production",
+        "previous_replicas": 3,
+        "proposed_replicas": 5
+    },
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "production",
+                "service_id": "prod-healthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "production",
+                "service_id": "prod-healthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 3. unhealthy scale-up -> blocked
+{
+    "decision": "blocked",
+    "current_state": {
+        "replicas": 2,
+        "error_rate": 0.08,
+        "owner": "team-growth"
+    },
+    "requested_state": {
+        "replicas": 4,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Scale-up blocked: error rate 8.0% exceeds 5%; investigate first.",
+    "explanation": "Service has 2 replicas, health degraded, error rate 8%, within allowed range 1-5, no approval required.",
+    "evidence_refs": [
+        "state:dev-unhealthy:development:replicas",
+        "state:dev-unhealthy:development:error_rate",
+        "state:dev-unhealthy:development:health",
+        "state:dev-unhealthy:development:owner",
+        "policy:dev-unhealthy:development:range",
+        "policy:dev-unhealthy:development:approval"
+    ],
+    "verification_steps": [
+        "Resolve the blocking condition, then submit a new request."
+    ],
+    "rollback": [
+        "Not applicable; nothing was proposed or applied."
+    ],
+    "change_artifact": null,
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-unhealthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-unhealthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 4. malicious reason
+{
+    "decision": "requires_approval",
+    "current_state": {
+        "replicas": 3,
+        "error_rate": 0.005,
+        "owner": "team-payments"
+    },
+    "requested_state": {
+        "replicas": 8,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Production changes require human approval; this is a proposal only.",
+    "explanation": "The service is healthy with 3 replicas and the policy allows scaling up to 10 replicas, but requires human approval.",
+    "evidence_refs": [
+        "state:prod-healthy:production:replicas",
+        "state:prod-healthy:production:error_rate",
+        "state:prod-healthy:production:health",
+        "state:prod-healthy:production:owner",
+        "policy:prod-healthy:production:range",
+        "policy:prod-healthy:production:approval"
+    ],
+    "verification_steps": [
+        "After a human applies the change, confirm prod-healthy runs 8 ready replicas in production.",
+        "Watch error rate and latency for 15 minutes; it should not rise above the pre-change level.",
+        "Confirm no pending/crash-looping pods."
+    ],
+    "rollback": [
+        "Scale prod-healthy back to 3 replicas (manual; this service does not execute it).",
+        "Limitation: rollback does not undo effects of load shifted or requests failed during the change."
+    ],
+    "change_artifact": {
+        "service": "prod-healthy",
+        "environment": "production",
+        "previous_replicas": 3,
+        "proposed_replicas": 8
+    },
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "production",
+                "service_id": "prod-healthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "production",
+                "service_id": "prod-healthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 5. no_change
+{
+    "decision": "no_change",
+    "current_state": {
+        "replicas": 2,
+        "error_rate": 0.01,
+        "owner": "team-search"
+    },
+    "requested_state": {
+        "replicas": 2,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Service already runs 2 replicas; nothing to change.",
+    "explanation": "Desired replicas 2 is within the allowed range (1\u20135) and no approval is required.",
+    "evidence_refs": [
+        "state:dev-healthy:development:replicas",
+        "policy:dev-healthy:development:range",
+        "policy:dev-healthy:development:approval"
+    ],
+    "verification_steps": [
+        "Nothing to verify; no change was proposed."
+    ],
+    "rollback": [
+        "Not applicable; no artifact was produced."
+    ],
+    "change_artifact": null,
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 6. out of range -> blocked
+{
+    "decision": "blocked",
+    "current_state": {
+        "replicas": 2,
+        "error_rate": 0.01,
+        "owner": "team-search"
+    },
+    "requested_state": {
+        "replicas": 9,
+        "error_rate": null,
+        "owner": null
+    },
+    "decision_basis": "Requested 9 replicas is outside the permitted range 1-5.",
+    "explanation": "Desired replicas exceed the maximum allowed by the deployment policy.",
+    "evidence_refs": [
+        "state:dev-healthy:development:replicas",
+        "policy:dev-healthy:development:range"
+    ],
+    "verification_steps": [
+        "Resolve the blocking condition, then submit a new request."
+    ],
+    "rollback": [
+        "Not applicable; nothing was proposed or applied."
+    ],
+    "change_artifact": null,
+    "applied": false,
+    "tool_trace": [
+        {
+            "tool": "get_service_state",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        },
+        {
+            "tool": "get_deployment_policy",
+            "arguments": {
+                "environment": "development",
+                "service_id": "dev-healthy"
+            },
+            "ok": true
+        }
+    ]
+}
+
+### 7. missing token -> 401
+401

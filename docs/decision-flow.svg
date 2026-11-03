@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 570" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="570" fill="#fff"/>
+<text x="450" y="34" text-anchor="middle" font-size="20" font-weight="bold">How the code decides (first matching rule wins)</text>
+<text x="450" y="58" text-anchor="middle" font-size="13" fill="#475569">Implemented in app/policy.py. The model never takes part in this step.</text>
+<rect x="40" y="90" width="820" height="52" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+<circle cx="72" cy="116" r="14" fill="#dc2626"/><text x="72" y="121" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">1</text>
+<text x="104" y="121" font-size="15">If: State or policy missing / invalid</text>
+<text x="480" y="121" font-size="15" font-weight="bold">then blocked (fail safe)</text>
+<text x="450" y="156" text-anchor="middle" font-size="12" fill="#64748b">otherwise &#8595;</text>
+<rect x="40" y="160" width="820" height="52" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+<circle cx="72" cy="186" r="14" fill="#dc2626"/><text x="72" y="191" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">2</text>
+<text x="104" y="191" font-size="15">If: Requested replicas out of range</text>
+<text x="480" y="191" font-size="15" font-weight="bold">then blocked   (dev 1-5, prod 2-10)</text>
+<text x="450" y="226" text-anchor="middle" font-size="12" fill="#64748b">otherwise &#8595;</text>
+<rect x="40" y="230" width="820" height="52" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+<circle cx="72" cy="256" r="14" fill="#64748b"/><text x="72" y="261" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">3</text>
+<text x="104" y="261" font-size="15">If: Already at the requested count</text>
+<text x="480" y="261" font-size="15" font-weight="bold">then no_change   (no artifact)</text>
+<text x="450" y="296" text-anchor="middle" font-size="12" fill="#64748b">otherwise &#8595;</text>
+<rect x="40" y="300" width="820" height="52" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+<circle cx="72" cy="326" r="14" fill="#dc2626"/><text x="72" y="331" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">4</text>
+<text x="104" y="331" font-size="15">If: Scale-up and error rate above 5%</text>
+<text x="480" y="331" font-size="15" font-weight="bold">then blocked   (investigate first)</text>
+<text x="450" y="366" text-anchor="middle" font-size="12" fill="#64748b">otherwise &#8595;</text>
+<rect x="40" y="370" width="820" height="52" rx="8" fill="#fffbeb" stroke="#d97706"/>
+<circle cx="72" cy="396" r="14" fill="#d97706"/><text x="72" y="401" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">5</text>
+<text x="104" y="401" font-size="15">If: Production environment</text>
+<text x="480" y="401" font-size="15" font-weight="bold">then requires_approval   (proposal only)</text>
+<text x="450" y="436" text-anchor="middle" font-size="12" fill="#64748b">otherwise &#8595;</text>
+<rect x="40" y="440" width="820" height="52" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+<circle cx="72" cy="466" r="14" fill="#16a34a"/><text x="72" y="471" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">6</text>
+<text x="104" y="471" font-size="15">If: Everything else</text>
+<text x="480" y="471" font-size="15" font-weight="bold">then allowed</text>
+</svg>
