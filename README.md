@@ -159,7 +159,12 @@ The pod reaches Ollama on the host via `host.docker.internal:11434`. The token i
 **Missing service or policy?** An unknown service/environment returns `404`. A missing or invalid policy or state returns `blocked` with no artifact.
 
 ## Time spent
-Approximately **TODO: fill in actual hours** (core service, policy and tests first; docs and the optional kind deploy last).
+About **1 hour 15 minutes** in total:
+- Planning and design discussion: 20–30 min
+- Building the code: ~15 min
+- Testing against the acceptance criteria: ~20 min
+- GitHub repo setup, push and wrap-up: 10–15 min
+- Final check before submitting: ~5 min
 
 ## AI-use note
 I made the design, security and scope decisions. I used an AI coding assistant to implement them faster:
