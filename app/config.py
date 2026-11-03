@@ -19,5 +19,6 @@ def build_model() -> ModelClient:
         return FakeModel()
     if p["kind"] == "openai_compat":
         base = os.environ.get("MODEL_BASE_URL") or p["base_url"]
-        return OpenAICompatModel(base, p["model"], p.get("timeout_s", 60))
+        model_name = os.environ.get("MODEL_NAME") or p["model"]
+        return OpenAICompatModel(base, model_name, p.get("timeout_s", 60))
     raise ValueError(f"unknown provider kind for {name!r}")

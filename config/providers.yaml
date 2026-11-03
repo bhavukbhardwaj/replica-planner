@@ -14,3 +14,8 @@ providers:
     base_url: http://localhost:11434/v1
     model: qwen3:0.6b
     timeout_s: 60
+  hosted:                                 # any OpenAI-compatible API; set MODEL_BASE_URL, MODEL_NAME, MODEL_API_KEY
+    kind: openai_compat
+    base_url: https://api.openai.com/v1
+    model: gpt-4o-mini
+    timeout_s: 30

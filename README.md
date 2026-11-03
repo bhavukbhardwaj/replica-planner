@@ -24,7 +24,9 @@ Nothing is ever applied to infrastructure (`"applied": false`).
 
 ## Prerequisites
 - macOS/Linux with [uv](https://docs.astral.sh/uv/) (`brew install uv` or `curl -LsSf https://astral.sh/uv/install.sh | sh`). uv installs Python 3.12 and all dependencies from `uv.lock`. Offline mode needs nothing else.
-- Real model (optional): [Ollama](https://ollama.com) plus `ollama pull gpt-oss:20b` (about 13 GB). Any tool-calling model works; to use one, change `model` in `config/providers.yaml`.
+- Real model (optional), either:
+  - an API key for any OpenAI-compatible provider whose model supports tool calling (OpenAI, OpenRouter, Groq, vLLM...), or
+  - [Ollama](https://ollama.com) plus `ollama pull gpt-oss:20b` (about 13 GB download).
 
 ## Install / test / run
 ```bash
@@ -34,7 +36,12 @@ uv run pytest -q                      # 23 behavioral tests, offline, determinis
 # offline: deterministic fake model, no network
 PLAN_API_TOKEN=demo-token MODEL_PROVIDER=fake uv run uvicorn app.main:app --port 8000
 
-# real model: Ollama on localhost:11434
+# real model, option A: any OpenAI-compatible hosted API (fastest setup if you have a key)
+PLAN_API_TOKEN=demo-token MODEL_PROVIDER=hosted MODEL_API_KEY=<your-key> \
+  MODEL_BASE_URL=https://api.openai.com/v1 MODEL_NAME=gpt-4o-mini \
+  uv run uvicorn app.main:app --port 8000
+
+# real model, option B: local Ollama on localhost:11434 (no key; needs `ollama pull gpt-oss:20b`)
 PLAN_API_TOKEN=demo-token MODEL_PROVIDER=ollama uv run uvicorn app.main:app --port 8000
 
 # in another shell: all 7 demo cases (allowed, prod approval, unhealthy, malicious, no-change, out-of-range, 401)
@@ -45,9 +52,10 @@ PLAN_API_TOKEN=demo-token ./scripts/demo.sh
 | Name | Purpose |
 |---|---|
 | `PLAN_API_TOKEN` | Shared API token. Required: if it is unset, every request is rejected. Clients send it in the request header **`X-API-Token`**. |
-| `MODEL_PROVIDER` | Overrides `active` in the provider config (`fake`, `ollama`, `ollama-small`). Default: `fake`. |
+| `MODEL_PROVIDER` | Overrides `active` in the provider config (`fake`, `ollama`, `ollama-small`, `hosted`). Default: `fake`. |
 | `PROVIDER_CONFIG_PATH` | Provider list file (default `config/providers.yaml`). |
 | `MODEL_BASE_URL` | Optional base-URL override for the OpenAI-compatible provider. |
+| `MODEL_NAME` | Optional model-name override for the OpenAI-compatible provider. |
 | `MODEL_API_KEY` | Optional bearer key for hosted providers. Read from env only, never logged. |
 | `FIXTURE_DIR` | Optional alternative fixtures directory. |
 

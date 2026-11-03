@@ -82,7 +82,19 @@ curl -s -X POST localhost:8000/plan -H 'X-API-Token: demo-token' -H 'Content-Typ
 # rejected: wrong token → 401
 curl -s -o /dev/null -w '%{http_code}\n' -X POST localhost:8000/plan -H 'X-API-Token: wrong' -d '{}'
 ```
-For the real model, use `MODEL_PROVIDER=ollama` (needs `ollama pull gpt-oss:20b`). `./scripts/demo.sh` runs all seven cases.
+For a real model, use `MODEL_PROVIDER=ollama`, or `MODEL_PROVIDER=hosted` with `MODEL_BASE_URL`, `MODEL_NAME` and `MODEL_API_KEY`. `./scripts/demo.sh` runs all seven cases.
+
+## Evidence: genuine model + tool run (sanitized)
+Excerpt from `docs/sample-real-model-run.txt` (gpt-oss:20b via Ollama, all seven cases in the file):
+```
+### 3. unhealthy scale-up -> blocked     (dev-unhealthy, 2 -> 4, error rate 8%)
+"decision": "blocked",
+"decision_basis": "Scale-up blocked: error rate 8.0% exceeds 5%; investigate first.",
+"explanation": "Service has 2 replicas, health degraded, error rate 8%, within allowed range 1-5, no approval required.",
+"change_artifact": null,
+"tool_trace": [get_service_state ok, get_deployment_policy ok]
+```
+The model chose both tools itself. Its prose missed the error-rate rule, but code still blocked the request.
 
 ## Production gaps
 - Real inventory, metrics and policy sources (still read-only)
