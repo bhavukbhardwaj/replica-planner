@@ -125,7 +125,7 @@ Decisions: `allowed`, `requires_approval`, `blocked`, `no_change` (precedence in
 Errors: `401` bad/missing token, `422` malformed input, `404` unknown service/environment, `502` provider failure or rejected model output.
 Screenshot of the same request in Postman against the kind deployment (real `gpt-oss:20b` run, 200 OK in 4.7 s):
 
-![Postman: prod request returns requires_approval](docs/screenshots/postman-prod-requires-approval.png)
+![Postman: prod request returns requires_approval](docs/cio-memo-assets/postman-prod-requires-approval.png)
 
 A real-model run of all demo cases is saved in `docs/sample-real-model-run.txt`.
 
