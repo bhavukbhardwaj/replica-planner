@@ -162,7 +162,15 @@ The pod reaches Ollama on the host via `host.docker.internal:11434`. The token i
 Approximately **TODO: fill in actual hours** (core service, policy and tests first; docs and the optional kind deploy last).
 
 ## AI-use note
-Claude Code helped plan the design, scaffold code, tests and docs, and drive the local-model runs. I reviewed the behavior against each acceptance criterion.
-One suggestion I changed: the first agent version required every answer to cite valid evidence refs. That turned an unknown service into a
-`502` model error instead of a `404`/fail-safe, so I made unavailable evidence short-circuit before model-output validation.
-One I rejected: letting the model return the decision or artifact. Code derives both.
+I made the design, security and scope decisions. I used an AI coding assistant to implement them faster:
+- **Planning:** helping break the task into steps (I chose the design).
+- **Code and tests:** writing first drafts, which I reviewed and fixed.
+- **Docs:** drafting the README, CIO memo and technical walkthrough.
+- **Testing:** running the demo against the local model and checking the results.
+
+Key decisions I made and steered, for example:
+- plain code, not the AI model, makes the final decision (allowed / blocked / needs approval);
+- the model can only use two read-only tools, and nothing is ever applied;
+- the API token is read from an environment variable, and no secrets appear in code or logs.
+
+I checked everything against the acceptance criteria.
