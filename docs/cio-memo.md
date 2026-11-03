@@ -10,7 +10,7 @@
 - Reviewability: the plan lists the evidence it relied on and the tool calls made, so approvers can check it quickly.
 - Low cost and low risk: it runs with a local open model, needs no cloud account, and was tested offline, against a real model, and on a local Kubernetes cluster.
 
-![Live run](cio-memo-assets/postman-prod-requires-approval.png)
+![Live run](../cio-memo/postman-prod-requires-approval.png)
 *Live run: a production scale request returns "requires_approval".*
 
 **Limits.** It uses synthetic data, a shared-token login and fixed example thresholds. It is a proof of concept, not a production control.
