@@ -91,3 +91,22 @@ def test_provider_failure_is_controlled_and_leaks_nothing():
     r = call(req("dev-healthy", "development", 3), script="provider_error")
     assert r.status_code == 502 and r.json() == {"error": "model_provider_unavailable"}
     assert "Traceback" not in r.text and "test-token" not in r.text
+
+
+def test_invalid_fixture_data_fails_safe(tmp_path, monkeypatch):
+    # corrupt state (negative replicas) must never produce an approval
+    (tmp_path / "services.json").write_text(json.dumps({"dev-healthy:development": {
+        "service_id": "dev-healthy", "environment": "development", "replicas": -1, "owner": "x",
+        "error_rate": 0.0, "health": "healthy", "window": "last 30m"}}))
+    (tmp_path / "policies.json").write_text(json.dumps({"dev-healthy:development": {
+        "min_replicas": 1, "max_replicas": 5, "requires_approval": False, "constraints": []}}))
+    monkeypatch.setenv("FIXTURE_DIR", str(tmp_path))
+    d = call(req("dev-healthy", "development", 3)).json()
+    assert d["decision"] == "blocked" and d["change_artifact"] is None
+
+
+def test_logs_never_contain_token_or_reason(caplog):
+    caplog.set_level("INFO")
+    call(MALICIOUS)
+    call(req("dev-healthy", "development", 3), script="provider_error")
+    assert "test-token" not in caplog.text and "Ignore approvals" not in caplog.text

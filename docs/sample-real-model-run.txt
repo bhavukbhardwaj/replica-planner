@@ -1,3 +1,10 @@
+# Genuine model + tool run (sanitized: no secrets; demo token is a local placeholder)
+# Model: gpt-oss:20b via local Ollama (OpenAI-compatible /v1), captured 2026-11-03
+# Server: PLAN_API_TOKEN=demo-token MODEL_PROVIDER=ollama uv run uvicorn app.main:app --port 8000
+# Client: PLAN_API_TOKEN=demo-token ./scripts/demo.sh   (7 cases, ~45 s total)
+# Note case 3: the model's prose says 'no approval required', yet code returns 'blocked' (error rate 8% > 5%).
+#   'explanation' is display-only; the decision comes from app/policy.py.
+
 ### 1. allowed dev plan
 {
     "decision": "allowed",
